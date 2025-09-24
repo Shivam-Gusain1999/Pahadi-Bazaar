@@ -1,7 +1,7 @@
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import Stripe from "stripe";
-import User from "../models/User.js"
+import User from "../models/User.js";
 
 
 //  stripe gateway Initialize // 
