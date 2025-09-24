@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 
 // authUser middleware se req.user.id aayega
 export const updateCart = async (req, res) => {
