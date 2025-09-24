@@ -145,7 +145,7 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
-            to="/product"
+            to="/products"
             onClick={() => setOpen(false)}
             className="block w-full py-2 px-3 hover:bg-white/20 rounded-md transition"
           >
@@ -163,7 +163,7 @@ const Navbar = () => {
           )}
 
           <NavLink
-            to="/"
+            to="/contact"
             onClick={() => setOpen(false)}
             className="block w-full py-2 px-3 hover:bg-white/20 rounded-md transition"
           >
