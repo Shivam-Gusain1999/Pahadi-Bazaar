@@ -45,7 +45,7 @@ const Navbar = () => {
       <div className="hidden sm:flex items-center gap-8">
         <NavLink to="/" className="hover:text-primary font-medium transition">Home</NavLink>
         <NavLink to="/products" className="hover:text-primary font-medium transition">All Product</NavLink>
-        <NavLink to="/" className="hover:text-primary font-medium transition">Contact</NavLink>
+        <NavLink to="/contact" className="hover:text-primary font-medium transition">Contact</NavLink>
 
         {/* Search Box */}
         <div onChange={(e)=>{setSearchQuery(e.target.value)}} className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full bg-gray-50">
