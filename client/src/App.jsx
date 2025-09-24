@@ -18,6 +18,7 @@ import AddProduct from "./pages/seller/AddProduct";
 import ProductList from "./pages/seller/ProductList";
 import Orders from "./pages/seller/Orders";
 import Loading from "./components/Loading";
+import Home from "./pages/home";
 
 
 const App = () => {
