@@ -81,10 +81,8 @@ import amla from "./amla.png";
 import grapes from "./grapes.png";
 import kiwi from "./kiwi.png";
 import waiwai from "./waiwai.png";
-import beetrooot from "./beetrooot.png";
 
 export const assets = {
-  beetrooot,
   logo,
   search_icon,
   remove_icon,
