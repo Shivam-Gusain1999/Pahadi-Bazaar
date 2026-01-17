@@ -42,20 +42,20 @@ const WeatherWidget = () => {
             try {
                 setLoading(true);
 
-                // Step 1: Get user's location from IP
-                const ipResponse = await fetch('http://ip-api.com/json/');
+                // Step 1: Get user's location from IP (using HTTPS-enabled API)
+                const ipResponse = await fetch('https://ipapi.co/json/');
                 const ipData = await ipResponse.json();
 
-                if (ipData.status !== 'success') {
+                if (ipData.error) {
                     throw new Error('Could not detect location');
                 }
 
                 setLocation({
                     city: ipData.city,
-                    region: ipData.regionName,
-                    country: ipData.country,
-                    lat: ipData.lat,
-                    lon: ipData.lon
+                    region: ipData.region,
+                    country: ipData.country_name,
+                    lat: ipData.latitude,
+                    lon: ipData.longitude
                 });
 
                 // Step 2: Get weather data from Open-Meteo
