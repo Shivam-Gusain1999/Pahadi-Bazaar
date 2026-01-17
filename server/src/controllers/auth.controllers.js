@@ -1,10 +1,18 @@
 import User from "../models/user.models.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { HTTP_STATUS, getCookieOptions, JWT_EXPIRY } from "../constants.js";
+
+// Initialize Google OAuth client
+const googleClient = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    `${process.env.NODE_ENV === 'production' ? process.env.BACKEND_URL : 'http://localhost:4000'}/api/user/google/callback`
+);
 
 /**
  * @desc    Register new user
@@ -309,4 +317,89 @@ export const resetPassword = asyncHandler(async (req, res) => {
     res.status(HTTP_STATUS.OK).json(
         new ApiResponse(HTTP_STATUS.OK, null, "Password reset successfully")
     );
+});
+
+/**
+ * @desc    Initiate Google OAuth login
+ * @route   GET /api/user/google
+ * @access  Public
+ */
+export const googleAuth = asyncHandler(async (req, res) => {
+    const authorizeUrl = googleClient.generateAuthUrl({
+        access_type: 'offline',
+        scope: [
+            'https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/userinfo.email'
+        ],
+        prompt: 'consent'
+    });
+
+    res.redirect(authorizeUrl);
+});
+
+/**
+ * @desc    Handle Google OAuth callback
+ * @route   GET /api/user/google/callback
+ * @access  Public
+ */
+export const googleCallback = asyncHandler(async (req, res) => {
+    const { code } = req.query;
+
+    if (!code) {
+        return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}?error=no_code`);
+    }
+
+    try {
+        // Exchange authorization code for tokens
+        const { tokens } = await googleClient.getToken(code);
+        googleClient.setCredentials(tokens);
+
+        // Get user info from Google
+        const ticket = await googleClient.verifyIdToken({
+            idToken: tokens.id_token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { sub: googleId, email, name, picture } = payload;
+
+        // Check if user already exists
+        let user = await User.findOne({
+            $or: [{ googleId }, { email }]
+        });
+
+        if (user) {
+            // User exists - update googleId if not set (user registered with email first)
+            if (!user.googleId) {
+                user.googleId = googleId;
+                user.authProvider = 'google';
+                if (picture && !user.avatar) {
+                    user.avatar = picture;
+                }
+                await user.save();
+            }
+        } else {
+            // Create new user
+            user = await User.create({
+                name,
+                email,
+                googleId,
+                authProvider: 'google',
+                avatar: picture || '',
+            });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: JWT_EXPIRY });
+
+        // Set cookie
+        const isProduction = process.env.NODE_ENV === "production";
+        res.cookie("token", token, getCookieOptions(isProduction));
+
+        // Redirect to frontend
+        res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173');
+    } catch (error) {
+        console.error("Google OAuth error:", error);
+        res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}?error=auth_failed`);
+    }
 });
