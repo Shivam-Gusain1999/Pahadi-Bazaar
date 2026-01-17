@@ -1,19 +1,26 @@
 import Message from "../models/Message.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { HTTP_STATUS } from "../constants/index.js";
 
-// POST /api/contact
-export const createMessage = async (req, res) => {
-  try {
-    const { name, email, message } = req.body;
+/**
+ * @desc    Create contact message
+ * @route   POST /api/contact
+ * @access  Public
+ */
+export const createMessage = asyncHandler(async (req, res) => {
+  const { name, email, message } = req.body;
 
-    if (!name || !email || !message) {
-      return res.status(400).json({ success: false, message: "All fields are required" });
-    }
-
-    const newMessage = new Message({ name, email, message });
-    await newMessage.save();
-
-    res.status(201).json({ success: true, message: "Message saved successfully" });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+  // Validate required fields
+  if (!name || !email || !message) {
+    throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Name, email and message are required");
   }
-};
+
+  // Create and save message
+  const newMessage = await Message.create({ name, email, message });
+
+  res.status(HTTP_STATUS.CREATED).json(
+    new ApiResponse(HTTP_STATUS.CREATED, { message: newMessage }, "Message saved successfully")
+  );
+});

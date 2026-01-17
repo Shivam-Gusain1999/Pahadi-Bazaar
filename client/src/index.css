@@ -2,6 +2,9 @@
 
 @import "tailwindcss";
 
+/* Tailwind v4: Enable class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
 *{
   font-family: "Outfit", sans-serif;
 }
@@ -10,6 +13,8 @@
   --color-primary: #4fbf8b;
   --color-primary-dull: #44ae7c;
 }
+
 .no-scrollbar::-webkit-scrollbar{
   display: none;
 }
+

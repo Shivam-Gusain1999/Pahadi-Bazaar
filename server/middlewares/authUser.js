@@ -1,28 +1,33 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import { ApiError } from "../utils/ApiError.js";
+import { HTTP_STATUS } from "../constants/index.js";
 
-const authUser = async (req, res, next)=>{
-const {token} = req.cookies
-  if(!token){
-        return res.json({
-            success: false,
-            message: 'not authorized'
-        })
+/**
+ * Middleware to authenticate regular users
+ * Verifies JWT token from cookies and attaches user to request
+ */
+const authUser = async (req, res, next) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return next(new ApiError(HTTP_STATUS.UNAUTHORIZED, "Please login to continue"));
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decoded.id) {
+      return next(new ApiError(HTTP_STATUS.UNAUTHORIZED, "Invalid token"));
     }
 
-try {
-  const tokenDecode = jwt.verify(token, process.env.JWT_SECRET)
-  if(tokenDecode.id){
-    req.user = { id: tokenDecode.id };
-  }else{
-    return res.json({
-        success:false,
-        message: 'Not authorized'
-    })
+    req.user = { id: decoded.id };
+    next();
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return next(new ApiError(HTTP_STATUS.UNAUTHORIZED, "Token expired, please login again"));
+    }
+    return next(new ApiError(HTTP_STATUS.UNAUTHORIZED, "Invalid token"));
   }
-  next();
-} catch (error) {
-    res.json({success:false, message: error.message });
-}
-}
+};
 
 export default authUser;

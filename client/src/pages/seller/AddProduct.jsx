@@ -15,7 +15,7 @@ const [offerPrice, setOfferPrice] = useState('');
 const onSubmitHandler = async(event)=>{
     try {
           event.preventDefault()
-        const productData = {
+            const productData = {
             name,
             description: description.split('\n'),
             category,

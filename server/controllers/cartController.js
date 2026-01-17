@@ -1,17 +1,21 @@
-import User from "../models/User.js"
+import User from "../models/User.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { HTTP_STATUS } from "../constants/index.js";
 
-// authUser middleware se req.user.id aayega
-export const updateCart = async (req, res) => {
-  try {
-    const { cartItems } = req.body;       // frontend sirf cartItems bhejega
-    const userId = req.user.id;           // middleware se trusted userId
+/**
+ * @desc    Update user cart
+ * @route   POST /api/cart/update
+ * @access  Private
+ */
+export const updateCart = asyncHandler(async (req, res) => {
+  const { cartItems } = req.body;
+  const userId = req.user.id;
 
-    // Update cart in database
-    await User.findByIdAndUpdate(userId, { cartItems });
+  // Update cart in database
+  await User.findByIdAndUpdate(userId, { cartItems });
 
-    res.json({ success: true, message: "Cart updated" });
-  } catch (error) {
-    console.log("Update cart error:", error.message);
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
+  res.status(HTTP_STATUS.OK).json(
+    new ApiResponse(HTTP_STATUS.OK, null, "Cart updated successfully")
+  );
+});

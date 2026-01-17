@@ -4,18 +4,21 @@ import Categories from '../components/Categories'
 import BestSeller from '../components/BestSeller'
 import BottomBanner from '../components/BottomBanner'
 import NewsLetter from '../components/NewsLetter'
-import Footer from '../components/Footer'
+import StoreLocation from '../components/StoreLocation'
+import RecentlyViewed from '../components/RecentlyViewed'
 
 const Home = () => {
   return (
-  <div className="mt-10">
-  <MainBanner />
-  <Categories></Categories>
-  <BestSeller></BestSeller>
-  <BottomBanner></BottomBanner>
-  <NewsLetter></NewsLetter>
- 
-</div>
+    <div className="mt-10">
+      <MainBanner />
+      <Categories></Categories>
+      <BestSeller></BestSeller>
+      <StoreLocation />
+      <RecentlyViewed />
+      <BottomBanner></BottomBanner>
+      <NewsLetter></NewsLetter>
+
+    </div>
 
   )
 }

@@ -6,22 +6,22 @@ import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [open, setOpen] = React.useState(false);
-  const { user, setUser, showUserLogin, setShowUserLogin, navigate, searchQuery, setSearchQuery, getCartCount, axios } = useAppContext();
+  const { user, setUser, showUserLogin, setShowUserLogin, navigate, searchQuery, setSearchQuery, getCartCount, axios, darkMode, toggleTheme } = useAppContext();
 
-  useEffect(()=>{
-    if(searchQuery.length > 0){
+  useEffect(() => {
+    if (searchQuery.length > 0) {
       navigate('/products')
     }
   }, [searchQuery])
 
   const logout = async () => {
     try {
-      const {data} = await axios.get("/api/user/logout")
-      if(data.success){
-      toast.success(data.message)
+      const { data } = await axios.get("/api/user/logout")
+      if (data.success) {
+        toast.success(data.message)
         setUser(null);
-         navigate("/");
-      }else{
+        navigate("/");
+      } else {
         toast.error(data.message)
       }
     } catch (error) {
@@ -31,30 +31,50 @@ const Navbar = () => {
 
   return (
     <nav className="h-20 flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-3 
-                    border-b border-gray-200 bg-gradient-to-r from-white to-gray-50 relative transition-all">
+                    border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 relative transition-all duration-300">
       {/* Logo */}
       <NavLink to="/" onClick={() => setOpen(false)}>
         <img className="h-14 w-auto object-contain"
           src={assets.ppppp}
           alt="pahadibazarlogo"
-      
+
         />
       </NavLink>
 
       {/* Desktop Menu */}
       <div className="hidden sm:flex items-center gap-8">
-        <NavLink to="/" className="hover:text-primary font-medium transition">Home</NavLink>
-        <NavLink to="/products" className="hover:text-primary font-medium transition">All Product</NavLink>
-        <NavLink to="/contact" className="hover:text-primary font-medium transition">Contact</NavLink>
+        <NavLink to="/" className="hover:text-primary dark:text-gray-200 dark:hover:text-primary font-medium transition">Home</NavLink>
+        <NavLink to="/products" className="hover:text-primary dark:text-gray-200 dark:hover:text-primary font-medium transition">All Product</NavLink>
+        <NavLink to="/contact" className="hover:text-primary dark:text-gray-200 dark:hover:text-primary font-medium transition">Contact</NavLink>
+
+        {/* Theme Toggle */}
+        <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          {darkMode ? "☀️" : "🌙"}
+        </button>
 
         {/* Search Box */}
-        <div onChange={(e)=>{setSearchQuery(e.target.value)}} className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full bg-gray-50">
+        <div onChange={(e) => { setSearchQuery(e.target.value) }} className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 dark:border-gray-600 px-3 rounded-full bg-gray-50 dark:bg-gray-800">
           <input
-            className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500"
+            className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500 dark:placeholder-gray-400 dark:text-white"
             type="text"
             placeholder="Search products"
           />
-          <img src={assets.search_icon} alt="search" className="w-4 h-4 opacity-70" />
+          <img src={assets.search_icon} alt="search" className="w-4 h-4 opacity-70 dark:invert" />
+        </div>
+
+        {/* Wishlist */}
+        <div
+          onClick={() => navigate("/wishlist")}
+          className="relative cursor-pointer"
+        >
+          <svg
+            className="w-6 h-6 text-gray-600 dark:text-gray-300 hover:text-red-500 transition"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
         </div>
 
         {/* Cart */}
@@ -65,7 +85,7 @@ const Navbar = () => {
           <img
             src={assets.nav_cart_icon}
             alt="cart"
-            className="w-6 opacity-80"
+            className="w-6 opacity-80 dark:invert"
           />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
             {getCartCount()}
@@ -82,20 +102,32 @@ const Navbar = () => {
           </button>
         ) : (
           <div className="relative group">
-            <img src={assets.profile_icon} className="w-10" alt="profile" />
+            <img src={assets.profile_icon} className="w-10 dark:invert" alt="profile" />
 
-            <ul className="hidden group-hover:block absolute top-10 right-0 bg-white shadow-md border border-gray-200 py-2.5 w-36 rounded-lg text-sm z-40">
+            <ul className="hidden group-hover:block absolute top-10 right-0 bg-white dark:bg-gray-800 shadow-md border border-gray-200 dark:border-gray-700 py-2.5 w-36 rounded-lg text-sm z-40">
+              <li
+                onClick={() => navigate("/profile")}
+                className="p-2 hover:bg-primary/10 dark:hover:bg-gray-700 cursor-pointer rounded-md dark:text-gray-200"
+              >
+                👤 Profile
+              </li>
+              <li
+                onClick={() => navigate("/wishlist")}
+                className="p-2 hover:bg-primary/10 dark:hover:bg-gray-700 cursor-pointer rounded-md dark:text-gray-200"
+              >
+                💚 Wishlist
+              </li>
               <li
                 onClick={() => navigate("/my-orders")}
-                className="p-2 hover:bg-primary/10 cursor-pointer rounded-md"
+                className="p-2 hover:bg-primary/10 dark:hover:bg-gray-700 cursor-pointer rounded-md dark:text-gray-200"
               >
-                My Orders
+                📦 My Orders
               </li>
               <li
                 onClick={logout}
-                className="p-2 hover:bg-primary/10 cursor-pointer rounded-md"
+                className="p-2 hover:bg-primary/10 dark:hover:bg-gray-700 cursor-pointer rounded-md text-red-500"
               >
-                Logout
+                🚪 Logout
               </li>
             </ul>
           </div>
@@ -103,31 +135,36 @@ const Navbar = () => {
       </div>
 
 
-         
-         <div className="flex items-center gap-10 sm:hidden">
-         <div
+
+      <div className="flex items-center gap-5 sm:hidden">
+        {/* Mobile Theme Toggle */}
+        <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          {darkMode ? "☀️" : "🌙"}
+        </button>
+
+        <div
           onClick={() => navigate("/cart")}
           className="relative cursor-pointer"
         >
           <img
             src={assets.nav_cart_icon}
             alt="cart"
-            className="w-6 opacity-80"
+            className="w-6 opacity-80 dark:invert"
           />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
             {getCartCount()}
           </button>
         </div>
-    
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setOpen(!open)}
-        aria-label="Menu"
-        
-      >
-        <img src={assets.menu_icon} alt="menu" />
-      </button>
-    </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setOpen(!open)}
+          aria-label="Menu"
+
+        >
+          <img src={assets.menu_icon} alt="menu" className="dark:invert" />
+        </button>
+      </div>
       {/* Mobile Menu */}
       {open && (
         <div
