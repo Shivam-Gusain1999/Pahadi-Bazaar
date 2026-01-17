@@ -1,11 +1,13 @@
 import React from 'react'
 import { assets } from '../assets/assets'
 import { Link } from 'react-router-dom'
+import BannerWeather from './BannerWeather'
 
 const MainBanner = () => {
   return (
     <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50 via-green-100 to-teal-50">
-      {/* Animated Background Elements */}
+      {/* Weather Widget */}
+      <BannerWeather />
       <div className="absolute inset-0 overflow-hidden">
         {/* Floating circles */}
         <div className="absolute top-10 left-10 w-32 h-32 bg-green-200/30 rounded-full blur-2xl animate-pulse"></div>
