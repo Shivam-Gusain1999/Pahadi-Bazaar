@@ -1,11 +1,11 @@
 {
-    "name": "Pahadi Bazaar",
-    "short_name": "Pahadi Bazaar",
-    "description": "Fresh organic products from Uttarakhand delivered to your doorstep",
+    "name": "TicketHub",
+    "short_name": "TicketHub",
+    "description": "Book tickets for concerts, sports, theater and more. Instant booking with guaranteed seat availability.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#059669",
+    "theme_color": "#4f46e5",
     "orientation": "portrait-primary",
     "icons": [
         {
@@ -21,23 +21,15 @@
             "purpose": "any maskable"
         }
     ],
-    "screenshots": [
-        {
-            "src": "/screenshot.png",
-            "sizes": "1280x720",
-            "type": "image/png",
-            "form_factor": "wide"
-        }
-    ],
     "categories": [
-        "shopping",
-        "food"
+        "entertainment",
+        "tickets"
     ],
     "shortcuts": [
         {
-            "name": "Products",
-            "short_name": "Products",
-            "url": "/products",
+            "name": "Events",
+            "short_name": "Events",
+            "url": "/",
             "icons": [
                 {
                     "src": "/icon-192.png",
@@ -46,9 +38,9 @@
             ]
         },
         {
-            "name": "My Orders",
-            "short_name": "Orders",
-            "url": "/my-orders",
+            "name": "My Bookings",
+            "short_name": "Bookings",
+            "url": "/bookings",
             "icons": [
                 {
                     "src": "/icon-192.png",

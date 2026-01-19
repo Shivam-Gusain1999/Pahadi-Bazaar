@@ -1,49 +1,38 @@
-import React from 'react'
-import { assets, footerLinks } from '../assets/assets';
+import React from "react";
 
 const Footer = () => {
     return (
-        <div className="mt-1 md:mt-10 px-6 md:px-16 lg:px-24 xl:px-32 bg-green-50 dark:bg-gray-800">
-            <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-10 border-b border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300">
-                {/* Logo and description */}
-                <div>
-                    <img className="w-34 md:w-45" src={assets.ppppp} alt="pahadibazarphoto" />
-                    <p className="max-w-[410px] mt-6">
-                        Pahadi Bazaar is your trusted online store for all daily needs – from groceries to household essentials – delivered right to your doorstep.
-                    </p>
-                </div>
-
-                {/* Footer Links */}
-                <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5">
-                    {footerLinks.map((section, index) => (
-                        <div key={index}>
-                            <h3 className="font-semibold text-base text-gray-900 dark:text-white md:mb-5 mb-2">{section.title}</h3>
-                            <ul className="text-sm space-y-1">
-                                {section.links.map((link, i) => (
-                                    <li key={i}>
-                                        <a
-                                            href={link.url || "#"}
-                                            className="hover:text-green-700 dark:hover:text-green-400 transition-colors duration-300"
-                                        >
-                                            {link.text}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
+        <footer className="bg-gray-100 dark:bg-gray-800 mt-auto">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    {/* Logo & Description */}
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                            </svg>
                         </div>
-                    ))}
+                        <span className="font-bold text-gray-900 dark:text-white">TicketHub</span>
+                    </div>
+
+                    {/* Copyright */}
+                    <p className="text-gray-600 dark:text-gray-400 text-sm text-center">
+                        © {new Date().getFullYear()} TicketHub. All rights reserved.
+                    </p>
+
+                    {/* Links */}
+                    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                        <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                            Privacy Policy
+                        </a>
+                        <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                            Terms of Service
+                        </a>
+                    </div>
                 </div>
             </div>
-
-            {/* Copyright */}
-            <p className="py-4 text-center text-sm md:text-base text-gray-600 dark:text-gray-400">
-                Copyright {new Date().getFullYear()} ©
-                <a href="https://pahadibazaar.com" className="text-green-700 dark:text-green-400 hover:underline"> Pahadi Bazaar</a>
-                All Rights Reserved.
-            </p>
-        </div>
+        </footer>
     );
 };
 
 export default Footer;
-
