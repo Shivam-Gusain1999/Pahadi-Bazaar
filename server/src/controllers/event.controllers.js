@@ -1,18 +1,17 @@
 import Event from "../models/event.models.js";
 
-// Get all events
+
 export const getAllEvents = async (req, res) => {
     try {
         const { category, upcoming } = req.query;
 
         let filter = {};
 
-        // Filter by category
+       
         if (category && category !== "All") {
             filter.category = category;
         }
 
-        // Filter upcoming events only
         if (upcoming === "true") {
             filter.date = { $gte: new Date() };
         }
@@ -35,7 +34,7 @@ export const getAllEvents = async (req, res) => {
     }
 };
 
-// Get single event by ID
+
 export const getEventById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -62,7 +61,7 @@ export const getEventById = async (req, res) => {
     }
 };
 
-// Create new event (for seeding/admin)
+
 export const createEvent = async (req, res) => {
     try {
         const { name, description, date, venue, totalSeats, price, imageUrl, category } = req.body;
@@ -73,7 +72,7 @@ export const createEvent = async (req, res) => {
             date,
             venue,
             totalSeats,
-            availableSeats: totalSeats, // Initially all seats available
+            availableSeats: totalSeats, 
             price,
             imageUrl,
             category,
@@ -93,7 +92,6 @@ export const createEvent = async (req, res) => {
     }
 };
 
-// Update event
 export const updateEvent = async (req, res) => {
     try {
         const { id } = req.params;
@@ -124,7 +122,7 @@ export const updateEvent = async (req, res) => {
     }
 };
 
-// Delete event
+
 export const deleteEvent = async (req, res) => {
     try {
         const { id } = req.params;
@@ -151,7 +149,7 @@ export const deleteEvent = async (req, res) => {
     }
 };
 
-// Get event categories
+
 export const getCategories = async (req, res) => {
     try {
         const categories = ["All", "Concert", "Sports", "Theater", "Conference", "Festival", "Other"];

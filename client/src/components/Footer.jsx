@@ -12,12 +12,12 @@ const Footer = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                             </svg>
                         </div>
-                        <span className="font-bold text-gray-900 dark:text-white">TicketHub</span>
+                        <span className="font-bold text-gray-900 dark:text-white">KA Technology</span>
                     </div>
 
                     {/* Copyright */}
                     <p className="text-gray-600 dark:text-gray-400 text-sm text-center">
-                        © {new Date().getFullYear()} TicketHub. All rights reserved.
+                        © {new Date().getFullYear()} KA Technology. All rights reserved.
                     </p>
 
                     {/* Links */}

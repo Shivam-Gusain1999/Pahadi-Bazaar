@@ -6,7 +6,7 @@ export const createBooking = async (req, res) => {
     try {
         const { eventId, customerName, customerEmail, seatsBooked } = req.body;
 
-       
+
         if (!eventId || !customerName || !customerEmail || !seatsBooked) {
             return res.status(400).json({
                 success: false,
@@ -21,24 +21,23 @@ export const createBooking = async (req, res) => {
             });
         }
 
-        // ATOMIC OPERATION: Only update if enough seats available
-        // This prevents race conditions and overbooking
+       
         const updatedEvent = await Event.findOneAndUpdate(
             {
                 _id: eventId,
-                availableSeats: { $gte: seatsBooked }, // Check if enough seats
+                availableSeats: { $gte: seatsBooked }, 
             },
             {
-                $inc: { availableSeats: -seatsBooked }, // Atomically decrement
+                $inc: { availableSeats: -seatsBooked }, 
             },
             {
                 new: true,
             }
         );
 
-        // If no event returned, either not found or not enough seats
+    
         if (!updatedEvent) {
-            // Check if event exists
+           
             const eventExists = await Event.findById(eventId);
 
             if (!eventExists) {
@@ -48,7 +47,7 @@ export const createBooking = async (req, res) => {
                 });
             }
 
-            // Event exists but not enough seats
+            
             return res.status(400).json({
                 success: false,
                 message: `Not enough seats available. Only ${eventExists.availableSeats} seat(s) remaining.`,
@@ -56,10 +55,10 @@ export const createBooking = async (req, res) => {
             });
         }
 
-        // Calculate total amount
+        
         const totalAmount = updatedEvent.price * seatsBooked;
 
-        // Create booking record
+      
         const booking = await Booking.create({
             event: eventId,
             customerName,
@@ -68,7 +67,7 @@ export const createBooking = async (req, res) => {
             totalAmount,
         });
 
-        // Populate event details for response
+      
         await booking.populate("event", "name date venue");
 
         res.status(201).json({
@@ -88,7 +87,7 @@ export const createBooking = async (req, res) => {
     }
 };
 
-// Get all bookings
+
 export const getAllBookings = async (req, res) => {
     try {
         const { email } = req.query;
@@ -117,12 +116,12 @@ export const getAllBookings = async (req, res) => {
     }
 };
 
-// Get booking by ID
+
 export const getBookingById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Try to find by bookingId first, then by MongoDB _id
+        
         let booking = await Booking.findOne({ bookingId: id })
             .populate("event")
             .lean();
@@ -153,12 +152,12 @@ export const getBookingById = async (req, res) => {
     }
 };
 
-// Cancel booking (restore seats)
+
 export const cancelBooking = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Find booking
+      
         const booking = await Booking.findOne({ bookingId: id });
 
         if (!booking) {
@@ -175,12 +174,11 @@ export const cancelBooking = async (req, res) => {
             });
         }
 
-        // Atomically restore seats
+       
         await Event.findByIdAndUpdate(booking.event, {
             $inc: { availableSeats: booking.seatsBooked },
         });
 
-        // Update booking status
         booking.status = "cancelled";
         await booking.save();
 

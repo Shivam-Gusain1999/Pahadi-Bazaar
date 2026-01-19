@@ -1,6 +1,6 @@
 {
-    "name": "TicketHub",
-    "short_name": "TicketHub",
+    "name": "KA Technology",
+    "short_name": "KA Tech",
     "description": "Book tickets for concerts, sports, theater and more. Instant booking with guaranteed seat availability.",
     "start_url": "/",
     "display": "standalone",
