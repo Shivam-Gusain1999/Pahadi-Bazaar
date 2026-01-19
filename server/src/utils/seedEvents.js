@@ -76,7 +76,7 @@ const sampleEvents = [
         totalSeats: 400,
         availableSeats: 400,
         price: 450,
-        imageUrl: "https://images.unsplash.com/photo-1461896836934- voices?w=800",
+        imageUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800",
         category: "Sports",
     },
     {

@@ -1,12 +1,12 @@
 import Event from "../models/event.models.js";
 import Booking from "../models/booking.models.js";
 
-// Book tickets - WITH ATOMIC SEAT RESERVATION (prevents overbooking)
+
 export const createBooking = async (req, res) => {
     try {
         const { eventId, customerName, customerEmail, seatsBooked } = req.body;
 
-        // Validate input
+       
         if (!eventId || !customerName || !customerEmail || !seatsBooked) {
             return res.status(400).json({
                 success: false,
