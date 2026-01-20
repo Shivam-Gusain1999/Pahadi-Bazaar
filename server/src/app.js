@@ -18,6 +18,7 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:5173",
     "https://pahadi-bazaar-website.vercel.app",
+            "https://ka-technology-client.vercel.app",
     // Add any other frontend URLs here
 ];
 
