@@ -1,37 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
 
 const Login = () => {
     const { setShowUserLogin, setUser, axios, navigate } = useAppContext()
-    const [state, setState] = React.useState("login");
-    const [name, setName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const [state, setState] = useState("login");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmitHandler = async (event) => {
+        event.preventDefault();
+        setIsLoading(true);
 
         try {
-            event.preventDefault();
             const { data } = await axios.post(`/api/user/${state}`, {
                 name, email, password
-            })
-            if (data.success) {
-                navigate('/')
-                setUser(data.user)
-                setShowUserLogin(false)
-            } else {
-                toast.error(data.message)
-            }
+            });
 
+            if (data.success) {
+                toast.success(state === "register" ? "Account created successfully!" : "Login successful!");
+                navigate('/');
+                setUser(data.user);
+                setShowUserLogin(false);
+            } else {
+                toast.error(data.message || "Something went wrong");
+            }
         } catch (error) {
-            toast.error(error.message)
+            const errorMessage = error.response?.data?.message || error.message || "Network error. Please try again.";
+            toast.error(errorMessage);
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
 
     const handleGoogleLogin = () => {
-        // Redirect to backend Google OAuth endpoint
-        window.location.href = 'http://localhost:4000/api/user/google';
+        // Redirect to backend Google OAuth endpoint using environment variable
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+        window.location.href = `${backendUrl}/api/user/google`;
     };
 
     return (<div onClick={() => { setShowUserLogin(false) }} className="text-gray-950 dark:text-white fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center bg-black/30 backdrop-blur-sm">
@@ -63,10 +70,14 @@ const Login = () => {
                 </p>
             )}
             <button
-                className={`w-full py-2.5 rounded-md cursor-pointer text-white font-medium transition-all shadow-md hover:shadow-lg ${state === "register" ? "bg-green-500 hover:bg-green-600" : "bg-primary hover:bg-primary-dull"
+                disabled={isLoading}
+                className={`w-full py-2.5 rounded-md cursor-pointer text-white font-medium transition-all shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${state === "register" ? "bg-green-500 hover:bg-green-600" : "bg-primary hover:bg-primary-dull"
                     }`}
             >
-                {state === "register" ? "Create Account" : "Login"}
+                {isLoading && (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                )}
+                {isLoading ? "Please wait..." : (state === "register" ? "Create Account" : "Login")}
             </button>
 
             {/* Divider */}
